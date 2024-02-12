@@ -1,58 +1,107 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-<head
+<html lang="en">
+<head>
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
 <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Solo Leveling</title>
+    <title>Sistema de Quests</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.css" rel="stylesheet">
 </head>
 <body>
-    <py-scripy>
-        
-    </py-scripy>
-    <nav class="navigation">
-        <ul>
-            <li><a href="#">Início</a></li>
-            <li><a href="#">Missões</a></li>
-            <li><a href="#">Galeria</a></li>
-        </ul>
-    </nav>
-    <section class="landing">
-        <h1>Bem-vindo ao Mundo de Solo Leveling</h1>
-        <p>Embarque em missões cotidianas, suba de nível e torne-se o mestre do seu dia!</p>
-        <button id="startButton">Começar Agora</button>
-    </section>
-    <div class="container" id="missionContainer" style="display: none;">
-        <h2>Sistema de Solo Leveling</h2>
-        <div class="level">
-            <span>Nível:</span>
-            <span id="level">1</span>
-            <div class="exp-bar">
-                <div id="expBar"></div>
-            </div>
-            <div class="quest" id="quest">
-                <p class="mission"><input type="checkbox" onchange="updateExp(this)"> Treinar 1 hora por dia</p>
-                <p class="mission"><input type="checkbox" onchange="updateExp(this)"> Estudar 2 horas</p>
-                <p class="mission"><input type="checkbox" onchange="updateExp(this)"> Ler por 15 minutos</p>
-            </div>
+    <pyscript> import datetime
+
+class User:
+    def __init__(self):
+        self.level = 0
+        self.experience = 0
+        self.physical = 0
+        self.intelligence = 0
+        self.music = 0
+        self.daily_quests = {
+            "Estudar 2 horas": {"experience": 50, "attribute": "intelligence"},
+            "Treinar 1 hora": {"experience": 30, "attribute": "physical"},
+            "Ler por 15 minutos": {"experience": 20, "attribute": "intelligence"},
+            "Tocar o instrumento": {"experience": 40, "attribute": "music"}
+        }
+        self.monthly_goals = {
+            "Bater a meta de ter pelo menos produtividade de 60% do mês": {"attribute": "intelligence", "target": 60},
+            "Ter conseguido ficar satisfeito comigo mesmo": {"attribute": "physical", "target": 1},
+            "Voltar a estudar e tocar o trombone": {"attribute": "intelligence", "target": 1},
+            "Ser feliz": {"attribute": "music", "target": 1}
+        }
+        self.start_date = datetime.datetime.now()
+
+    def complete_quest(self, quest):
+        quest_data = self.daily_quests.get(quest)
+        if quest_data:
+            self.experience += quest_data["experience"]
+            setattr(self, quest_data["attribute"], getattr(self, quest_data["attribute"]) + 1)
+            self.level = self.experience // 100
+
+    def calculate_daily_progress(self):
+        total_quests = len(self.daily_quests)
+        completed_quests = sum(1 for quest in self.daily_quests if getattr(self, quest["attribute"]) > 0)
+        return (completed_quests / total_quests) * 100 if total_quests > 0 else 0
+
+    def check_monthly_goals(self):
+        for goal, data in self.monthly_goals.items():
+            if getattr(self, data["attribute"]) >= data["target"]:
+                print(f"Você alcançou a meta do mês: {goal}")
+
+# Exemplo de uso:
+user = User()
+user.complete_quest("Estudar 2 horas")
+user.complete_quest("Treinar 1 hora")
+user.complete_quest("Ler por 15 minutos")
+user.complete_quest("Tocar o instrumento")
+
+daily_progress = user.calculate_daily_progress()
+print(f"Porcentagem de conclusão das quests diárias: {daily_progress}%")
+user.check_monthly_goals()
+</pyscript>
+    <div class="container">
+        <h1>Sistema de Quests</h1>
+        <div class="stats">
+            <p>Nível: <span id="level">0</span></p>
+            <p>Experiência: <span id="experience">0</span></p>
+            <p>Faltam: <span id="exp-needed">100</span> de experiência para o próximo nível</p>
         </div>
-        <button id="completeDayBtn" style="display: none;">Concluir Dia</button>
-    </div>
-
-    <div id="calendar"></div>
-
-    <div class="daily-log">
-        <h2>Registro Diário</h2>
-        <textarea id="dailyLog" placeholder="Como foi o seu dia?"></textarea>
-        <input type="file" id="dailyPhoto" accept="image/*">
+        <div class="daily-quests">
+            <h2>Quests do Dia:</h2>
+            <button onclick="completeQuest('Estudar 2 horas')">Estudar 2 horas</button>
+            <button onclick="completeQuest('Treinar 1 hora')">Treinar 1 hora</button>
+            <button onclick="completeQuest('Ler por 15 minutos')">Ler por 15 minutos</button>
+            <button onclick="completeQuest('Tocar o instrumento')">Tocar o instrumento</button>
+            <p>Porcentagem de conclusão das quests diárias: <span id="daily-progress">0</span>%</p>
+        </div>
+        <div class="daily-reflection">
+            <h2>Como foi seu dia?</h2>
+            <textarea id="daily-reflection-text" rows="4" cols="50"></textarea>
+            <input type="file" id="daily-photo" accept="image/*">
+            <button onclick="saveDailyReflection()">Salvar</button>
+            <button onclick="showPreviousReflections()">Ver anotações anteriores</button>
+        </div>
+        <div class="monthly-goals">
+            <h2>Metas do Mês:</h2>
+            <ul>
+                <li>Bater a meta de ter pelo menos produtividade de 60% do mês</li>
+                <li>Ter conseguido ficar satisfeito comigo mesmo</li>
+                <li>Voltar a estudar e tocar o trombone</li>
+                <li>Ser feliz</li>
+            </ul>
+        </div>
+        <div class="attributes">
+            <h2>Atributos:</h2>
+            <p>Físico: <span id="physical">0</span></p>
+            <p>Inteligência: <span id="intelligence">0</span></p>
+            <p>Música: <span id="music">0</span></p>
+        </div>
     </div>
 
     <script src="script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.js"></script>
 </body>
 </html>
+
 
 
