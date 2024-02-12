@@ -1,65 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Quests</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <pyscript> import datetime
-
-class User:
-    def __init__(self):
-        self.level = 0
-        self.experience = 0
-        self.physical = 0
-        self.intelligence = 0
-        self.music = 0
-        self.daily_quests = {
-            "Estudar 2 horas": {"experience": 50, "attribute": "intelligence"},
-            "Treinar 1 hora": {"experience": 30, "attribute": "physical"},
-            "Ler por 15 minutos": {"experience": 20, "attribute": "intelligence"},
-            "Tocar o instrumento": {"experience": 40, "attribute": "music"}
-        }
-        self.monthly_goals = {
-            "Bater a meta de ter pelo menos produtividade de 60% do mês": {"attribute": "intelligence", "target": 60},
-            "Ter conseguido ficar satisfeito comigo mesmo": {"attribute": "physical", "target": 1},
-            "Voltar a estudar e tocar o trombone": {"attribute": "intelligence", "target": 1},
-            "Ser feliz": {"attribute": "music", "target": 1}
-        }
-        self.start_date = datetime.datetime.now()
-
-    def complete_quest(self, quest):
-        quest_data = self.daily_quests.get(quest)
-        if quest_data:
-            self.experience += quest_data["experience"]
-            setattr(self, quest_data["attribute"], getattr(self, quest_data["attribute"]) + 1)
-            self.level = self.experience // 100
-
-    def calculate_daily_progress(self):
-        total_quests = len(self.daily_quests)
-        completed_quests = sum(1 for quest in self.daily_quests if getattr(self, quest["attribute"]) > 0)
-        return (completed_quests / total_quests) * 100 if total_quests > 0 else 0
-
-    def check_monthly_goals(self):
-        for goal, data in self.monthly_goals.items():
-            if getattr(self, data["attribute"]) >= data["target"]:
-                print(f"Você alcançou a meta do mês: {goal}")
-
-# Exemplo de uso:
-user = User()
-user.complete_quest("Estudar 2 horas")
-user.complete_quest("Treinar 1 hora")
-user.complete_quest("Ler por 15 minutos")
-user.complete_quest("Tocar o instrumento")
-
-daily_progress = user.calculate_daily_progress()
-print(f"Porcentagem de conclusão das quests diárias: {daily_progress}%")
-user.check_monthly_goals()
-</pyscript>
     <div class="container">
         <h1>Sistema de Quests</h1>
         <div class="stats">
