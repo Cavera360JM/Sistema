@@ -25,10 +25,13 @@
         <div class="level">
             <span>Nível:</span>
             <span id="level">1</span>
+            <div class="exp-bar">
+                <div id="expBar"></div>
+            </div>
             <div class="quest" id="quest">
-                <p class="mission"><input type="checkbox" id="mission1"> Treinar 1 hora por dia</p>
-                <p class="mission"><input type="checkbox" id="mission2"> Estudar 2 horas</p>
-                <p class="mission"><input type="checkbox" id="mission3"> Ler por 15 minutos</p>
+                <p class="mission"><input type="checkbox" onchange="updateExp(this)"> Treinar 1 hora por dia</p>
+                <p class="mission"><input type="checkbox" onchange="updateExp(this)"> Estudar 2 horas</p>
+                <p class="mission"><input type="checkbox" onchange="updateExp(this)"> Ler por 15 minutos</p>
             </div>
         </div>
         <button id="increaseBtn">Aumentar Nível</button>
@@ -46,6 +49,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.js"></script>
 </body>
 </html>
+
 
 
 
