@@ -1,12 +1,15 @@
 document.addEventListener("DOMContentLoaded", function() {
     const startButton = document.getElementById("startButton");
     const missionContainer = document.getElementById("missionContainer");
+    const expBar = document.getElementById("expBar");
 
     startButton.addEventListener("click", function() {
         missionContainer.style.display = "block";
     });
 
     let level = 1;
+    let exp = 0;
+    const expNeeded = 100; // Quantidade de EXP necessária para subir de nível
     const levelElement = document.getElementById("level");
     const questElement = document.getElementById("quest");
 
@@ -17,15 +20,32 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("increaseBtn").addEventListener("click", function() {
         level++;
         levelElement.innerText = level;
+        exp = 0; // Reseta a barra de experiência ao subir de nível
+        expBar.style.width = "0%";
         updateQuest(level);
     });
 
     function updateQuest(day) {
         const missions = missionsByDay[day] || [];
         if (missions.length > 0) {
-            questElement.innerHTML = missions.map(mission => `<p class="mission"><input type="checkbox"> ${mission}</p>`).join('');
+            questElement.innerHTML = missions.map(mission => `<p class="mission"><input type="checkbox" onchange="updateExp(this)"> ${mission}</p>`).join('');
         } else {
             questElement.innerHTML = "<p class='mission'>Nenhuma missão disponível</p>";
+        }
+    }
+
+    function updateExp(checkbox) {
+        if (checkbox.checked) {
+            exp += 25; // Quantidade de EXP ganha por missão concluída
+            const progress = (exp / expNeeded) * 100;
+            expBar.style.width = progress + "%";
+            if (exp >= expNeeded) {
+                exp = 0; // Reseta a barra de experiência ao subir de nível
+                level++;
+                levelElement.innerText = level;
+                expBar.style.width = "0%";
+                updateQuest(level);
+            }
         }
     }
 
@@ -41,4 +61,5 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     calendar.render();
 });
+
 
