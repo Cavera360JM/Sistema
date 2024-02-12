@@ -1,10 +1,27 @@
-import datetime
+import http.server
+import socketserver
 import webbrowser
+import datetime
+
+PORT = 8000
+
+class Handler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == '/':
+            self.path = 'index.html'
+        return http.server.SimpleHTTPRequestHandler.do_GET(self)
+
+def start_server():
+    Handler.extensions_map['.css'] = 'text/css'
+    with socketserver.TCPServer(("", PORT), Handler) as httpd:
+        print(f"Servindo em http://localhost:{PORT}")
+        webbrowser.open(f"http://localhost:{PORT}")
+        httpd.serve_forever()
 
 def inicio_interativo():
     nome = input("Olá! Qual é o seu nome? ")
     print(f"Olá, {nome}! Bem-vindo ao seu diário interativo.")
-    webbrowser.open('index.html')  # Abre o arquivo HTML no navegador
+    start_server()
 
 def exibir_calendario_e_horas():
     agora = datetime.datetime.now()
@@ -38,3 +55,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
