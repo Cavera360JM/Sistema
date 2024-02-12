@@ -1,63 +1,67 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const startButton = document.getElementById("startButton");
-    const missionContainer = document.getElementById("missionContainer");
-    const expBar = document.getElementById("expBar");
-    const completeDayBtn = document.getElementById("completeDayBtn");
+let level = 0;
+let experience = 0;
+let physical = 0;
+let intelligence = 0;
+let music = 0;
 
-    startButton.addEventListener("click", function() {
-        missionContainer.style.display = "block";
-        startButton.style.display = "none"; // Esconde o botão "Começar Agora"
-    });
+const expNeededPerLevel = 100;
 
-    let level = 1;
-    let exp = 0;
-    const expNeeded = 100; // Quantidade de EXP necessária para subir de nível
-    const levelElement = document.getElementById("level");
-    const questElement = document.getElementById("quest");
-
-    const missionsByDay = {
-        1: ["Treinar 1 hora por dia", "Estudar 2 horas", "Ler por 15 minutos"],
-    };
-
-    completeDayBtn.addEventListener("click", function() {
-        exp = 0; // Reseta a barra de experiência ao concluir o dia
-        expBar.style.width = "0%";
-        updateQuest(level);
-    });
-
-    function updateQuest(day) {
-        const missions = missionsByDay[day] || [];
-        if (missions.length > 0) {
-            questElement.innerHTML = missions.map(mission => `<p class="mission"><input type="checkbox" onchange="updateExp(this)"> ${mission}</p>`).join('');
-        } else {
-            questElement.innerHTML = "<p class='mission'>Nenhuma missão disponível</p>";
-        }
+function completeQuest(quest) {
+    switch (quest) {
+        case "Estudar 2 horas":
+            experience += 50;
+            intelligence += 1;
+            break;
+        case "Treinar 1 hora":
+            experience += 30;
+            physical += 1;
+            break;
+        case "Ler por 15 minutos":
+            experience += 20;
+            intelligence += 1;
+            break;
+        case "Tocar o instrumento":
+            experience += 40;
+            music += 1;
+            break;
+        default:
+            break;
     }
+    updateStats();
+}
 
-    function updateExp(checkbox) {
-        if (checkbox.checked) {
-            exp += 25; // Quantidade de EXP ganha por missão concluída
-            const progress = (exp / expNeeded) * 100;
-            expBar.style.width = progress + "%";
-            if (exp >= expNeeded) {
-                exp = 0; // Reseta a barra de experiência ao subir de nível
-                level++;
-                levelElement.innerText = level;
-                expBar.style.width = "0%";
-                updateQuest(level);
-            }
-        }
-    }
+function updateStats() {
+    document.getElementById('level').innerText = level;
+    document.getElementById('experience').innerText = experience;
+    document.getElementById('physical').innerText = physical;
+    document.getElementById('intelligence').innerText = intelligence;
+    document.getElementById('music').innerText = music;
+    const expNeeded = expNeededPerLevel - (experience % expNeededPerLevel);
+    document.getElementById('exp-needed').innerText = expNeeded;
 
-    const calendarEl = document.getElementById('calendar');
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-        selectable: true,
-        dateClick: function(info) {
-            const day = info.date.getDate();
-            level = day;
-            levelElement.innerText = level;
-            updateQuest(day);
-        }
+    const totalQuests = 4; // Número total de quests diárias
+    const completedQuests = physical > 0 + intelligence > 0 + music > 0 ? 1 : 0; // Conta quests completadas
+    const dailyProgress = Math.round((completedQuests / totalQuests) * 100); // Calcula progresso diário
+    document.getElementById('daily-progress').innerText = dailyProgress;
+}
+
+function saveDailyReflection() {
+    const dailyReflectionText = document.getElementById('daily-reflection-text').value;
+    // Salvar a anotação em algum lugar (por exemplo, armazenamento local ou banco de dados)
+    console.log("Anotação do dia salva:", dailyReflectionText);
+
+    // Resetar o campo de texto após salvar
+    document.getElementById('daily-reflection-text').value = "";
+}
+
+function showPreviousReflections() {
+    // Recuperar anotações anteriores (do armazenamento local ou banco de dados) e exibir para o usuário
+    console.log("Anotações anteriores:");
+    // Exibir anotações anteriores em algum lugar na interface do usuário
+}
+
+updateStats(); // Atualizar estatísticas iniciais ao carregar a página
+
     });
     calendar.render();
 });
