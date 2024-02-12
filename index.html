@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Solo Leveling</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.css" rel="stylesheet">
 </head>
 <body>
     <nav class="navigation">
@@ -26,10 +27,20 @@
         <div class="level">
             <span>Nível:</span>
             <span id="level">1</span>
-            <p class="quest">Missão: Estudar por 2 horas</p>
+            <div class="quest" id="quest">
+                <p class="mission">Nenhuma missão disponível</p>
+            </div>
         </div>
         <button id="increaseBtn">Aumentar Nível</button>
     </div>
+
+    <div id="calendar"></div>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.js"></script>
+</body>
+</html>
+
 
     <script src="script.js"></script>
 </body>
