@@ -1,121 +1,43 @@
 body {
+    background-color: #2c3e50; /* verde escuro */
+    color: #ecf0f1; /* branco */
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #1e1e1e;
-    color: #ffffff;
-    transition: background-color 0.3s;
-}
-
-.navigation {
-    background-color: #5e35b1;
-    padding: 20px 0;
-    text-align: center;
-}
-
-.navigation ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-.navigation ul li {
-    display: inline;
-    margin: 0 10px;
-}
-
-.navigation ul li a {
-    text-decoration: none;
-    color: #ffffff;
-    font-weight: bold;
-    transition: color 0.3s;
-}
-
-.navigation ul li a:hover {
-    color: #c5cae9;
-}
-
-.landing {
-    text-align: center;
-    padding: 100px 0;
 }
 
 .container {
-    text-align: center;
-    margin-top: 50px;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #34495e; /* verde mais claro */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.level {
+h1 {
+    text-align: center;
+    color: #27ae60; /* verde */
+}
+
+.stats {
     margin-bottom: 20px;
 }
 
-.exp-bar {
-    background-color: #757575;
-    height: 20px;
-    margin-top: 10px;
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-#expBar {
-    background-color: #4caf50;
-    height: 100%;
-    width: 0;
-    transition: width 0.5s ease-in-out;
-}
-
-.quest {
-    font-style: italic;
-    color: #c5cae9;
-}
-
 button {
+    display: block;
+    margin: 0 auto;
     padding: 10px 20px;
-    background-color: #673ab7;
+    background-color: #27ae60; /* verde */
     border: none;
-    color: white;
-    cursor: pointer;
     border-radius: 5px;
-    transition: background-color 0.3s;
+    color: #ecf0f1; /* branco */
+    font-size: 16px;
+    cursor: pointer;
 }
 
 button:hover {
-    background-color: #311b92;
+    background-color: #2ecc71; /* verde mais claro */
 }
 
-button:active {
-    transform: translateY(2px);
-}
-
-.mission {
-    padding: 5px;
-    border-radius: 5px;
-    background-color: #512da8;
-    margin: 5px 0;
-    transition: background-color 0.3s;
-}
-
-.mission:hover {
-    background-color: #7e57c2;
-}
-
-#calendar {
-    margin-top: 20px;
-}
-
-.daily-log {
-    display: none;
-}
-
-.daily-log h2 {
-    margin-top: 20px;
-}
-
-.daily-log textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-}
 
 .daily-log input {
     margin-top: 10px;
