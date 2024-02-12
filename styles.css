@@ -88,3 +88,21 @@ button:active {
     margin-top: 20px;
 }
 
+.daily-log {
+    display: none;
+}
+
+.daily-log h2 {
+    margin-top: 20px;
+}
+
+.daily-log textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.daily-log input {
+    margin-top: 10px;
+}
+
