@@ -4,6 +4,7 @@ body {
     padding: 0;
     background-color: #1e1e1e;
     color: #ffffff;
+    transition: background-color 0.3s;
 }
 
 .navigation {
@@ -27,6 +28,11 @@ body {
     text-decoration: none;
     color: #ffffff;
     font-weight: bold;
+    transition: color 0.3s;
+}
+
+.navigation ul li a:hover {
+    color: #c5cae9;
 }
 
 .landing {
@@ -60,5 +66,25 @@ button {
 
 button:hover {
     background-color: #311b92;
+}
+
+button:active {
+    transform: translateY(2px);
+}
+
+.mission {
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #512da8;
+    margin: 5px 0;
+    transition: background-color 0.3s;
+}
+
+.mission:hover {
+    background-color: #7e57c2;
+}
+
+#calendar {
+    margin-top: 20px;
 }
 
