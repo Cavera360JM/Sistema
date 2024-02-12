@@ -2,9 +2,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const startButton = document.getElementById("startButton");
     const missionContainer = document.getElementById("missionContainer");
     const expBar = document.getElementById("expBar");
+    const completeDayBtn = document.getElementById("completeDayBtn");
 
     startButton.addEventListener("click", function() {
         missionContainer.style.display = "block";
+        startButton.style.display = "none"; // Esconde o botão "Começar Agora"
     });
 
     let level = 1;
@@ -17,10 +19,8 @@ document.addEventListener("DOMContentLoaded", function() {
         1: ["Treinar 1 hora por dia", "Estudar 2 horas", "Ler por 15 minutos"],
     };
 
-    document.getElementById("increaseBtn").addEventListener("click", function() {
-        level++;
-        levelElement.innerText = level;
-        exp = 0; // Reseta a barra de experiência ao subir de nível
+    completeDayBtn.addEventListener("click", function() {
+        exp = 0; // Reseta a barra de experiência ao concluir o dia
         expBar.style.width = "0%";
         updateQuest(level);
     });
