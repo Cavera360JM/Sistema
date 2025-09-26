@@ -14,4 +14,21 @@ def criar_tabela_subtarefas():
     )
     ''')
     
-    conn.c
+    conn.commit()
+    conn.close()
+
+def inserir_subtarefa(id_subtarefa, id_tarefa_pai, titulo, status_id, data_conclusao=None):
+    conn = sqlite3.connect('meubanco.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+    INSERT INTO subtarefas_Tb (id_subtarefa, id_tarefa_pai, titulo, status_id, data_conclusao)
+    VALUES (?, ?, ?, ?, ?)
+    ''', (id_subtarefa, id_tarefa_pai, titulo, status_id, data_conclusao))
+    
+    conn.commit()
+    conn.close()
+
+# Exemplo de criação e inserção
+criar_tabela_subtarefas()
+inserir_subtarefa(1, 1, 'Subtarefa: Desenvolvimento de Módulo', 1, None)
