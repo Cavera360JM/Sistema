@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Tarefa | TTK2k</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1f2937; /* Dark background */
+        }
+        .container-card {
+            background-color: #374151; /* Lighter dark card */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #4b5563;
+            background-color: #1f2937;
+            color: #f3f4f6;
+            transition: all 0.2s;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        }
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+        .flash {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            color: white;
+        }
+        .flash.success { background-color: #10b981; }
+        .flash.danger { background-color: #ef4444; }
+        .flash.info { background-color: #60a5fa; }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col items-center p-4">
+        <!-- Navegação de exemplo para retorno -->
+        <header class="w-full max-w-4xl mb-6">
+            <nav class="flex justify-between items-center py-4 text-white">
+                <a href="{{ url_for('index') }}" class="text-xl font-bold text-blue-400 hover:text-blue-300">← Voltar para Tarefas</a>
+                <div>
+                    <span class="mr-4">Olá, {{ session.get('user_nome', 'Usuário') }}!</span>
+                    <a href="{{ url_for('logout') }}" class="text-red-400 hover:text-red-300">Sair</a>
+                </div>
+            </nav>
+        </header>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="w-full max-w-4xl">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Card de Nova Tarefa -->
+        <div class="container-card w-full max-w-xl p-8 rounded-xl shadow-lg text-white">
+            <h1 class="text-3xl font-extrabold mb-6 text-center text-gray-100">Criar Nova Tarefa</h1>
+            
+            <form action="{{ url_for('nova_tarefa') }}" method="POST" class="space-y-6">
+                
+                <div>
+                    <label for="titulo" class="block text-sm font-medium mb-2 text-gray-300">Título</label>
+                    <input type="text" id="titulo" name="titulo" required class="form-input">
+                </div>
+                
+                <div>
+                    <label for="descricao" class="block text-sm font-medium mb-2 text-gray-300">Descrição</label>
+                    <textarea id="descricao" name="descricao" rows="4" required class="form-textarea"></textarea>
+                </div>
+                
+                <!-- CAMPO DE STATUS (CRUCIAL PARA A CORREÇÃO) -->
+                <div>
+                    <label for="status_id" class="block text-sm font-medium mb-2 text-gray-300">Status</label>
+                    <select id="status_id" name="status_id" required class="form-select">
+                        {% for status in status_opcoes %}
+                            <option value="{{ status.id }}" {% if status.id == 1 %}selected{% endif %}>{{ status.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- CAMPO DE PRIORIDADE (CRUCIAL PARA A CORREÇÃO) -->
+                <div>
+                    <label for="prioridade_id" class="block text-sm font-medium mb-2 text-gray-300">Prioridade</label>
+                    <select id="prioridade_id" name="prioridade_id" required class="form-select">
+                        {% for prioridade in prioridade_opcoes %}
+                            <option value="{{ prioridade.id }}" {% if prioridade.id == 2 %}selected{% endif %}>{{ prioridade.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="btn-primary font-semibold hover:scale-105 transform transition duration-300">
+                        Salvar Tarefa
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

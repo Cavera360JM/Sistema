@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gerenciador de Tarefas{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="{{ url_for('index') }}">Gerenciador de Tarefas</a></h1>
+            <nav>
+                {% if session.logged_in %}
+                    <span>Olá, {{ session.user_nome }}</span>
+                    <a href="{{ url_for('index') }}">Tarefas</a>
+                    <a href="{{ url_for('projetos') }}">Projetos</a>
+                    <a href="{{ url_for('equipes') }}">Equipes</a>
+                    <a href="{{ url_for('membros') }}">Membros</a>
+                    <a href="{{ url_for('tags') }}">Tags</a>
+                    <a href="{{ url_for('historico') }}">Histórico</a>
+                    <a href="{{ url_for('logout') }}">Sair</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Login</a>
+                    <a href="{{ url_for('cadastro') }}">Cadastrar</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for category, message in messages %}
+                            <li class="alert-{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 Gerenciador de Tarefas</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Tarefas | TaskPro{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-6 border-b pb-4">
+    <h2 class="text-3xl font-bold text-gray-800">Minhas Tarefas</h2>
+    <a href="{{ url_for('nova_tarefa') }}" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition duration-150 shadow-lg flex items-center">
+        <i class="fas fa-plus mr-2"></i> Nova Tarefa
+    </a>
+</div>
+
+{% if tarefas %}
+    <div class="space-y-4">
+        {% for tarefa in tarefas %}
+            <div class="bg-white border border-gray-100 p-5 rounded-xl shadow-lg hover:shadow-xl transition duration-300 flex justify-between items-start">
+                <div class="flex-1 min-w-0">
+                    <a href="{{ url_for('tarefa', firebase_id=tarefa.firebase_id) }}" class="text-xl font-semibold text-gray-900 hover:text-indigo-600 transition duration-150 break-words">
+                        {{ tarefa.titulo }}
+                    </a>
+                    <p class="text-sm text-gray-500 mt-1 mb-2 truncate max-w-xl">{{ tarefa.descricao }}</p>
+
+                    <!-- Tags e Projeto (Simulação visual, pois a lógica de busca de nomes é complexa no template) -->
+                    <div class="flex items-center space-x-2 text-xs mt-2">
+                        {% if tarefa.id_projeto %}
+                            <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full font-medium">
+                                Projeto: {{ tarefa.id_projeto | truncate(10, end='...') }}
+                            </span>
+                        {% endif %}
+                        
+                        {% if tarefa.tags %}
+                            <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded-full font-medium">
+                                Tags: {{ tarefa.tags | length }}
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-end space-y-2 ml-4">
+                    <!-- Status -->
+                    <span class="px-3 py-1 text-xs font-bold uppercase rounded-full shadow-sm" style="background-color: {{ tarefa.status.cor }}; color: white;">
+                        {{ tarefa.status.nome }}
+                    </span>
+                    
+                    <!-- Prioridade -->
+                    <span class="text-xs text-gray-500">
+                        Prioridade: <span class="font-semibold text-gray-700">{{ tarefa.prioridade }}</span>
+                    </span>
+                    
+                    <!-- Data -->
+                    <span class="text-xs text-gray-400">
+                        Criada em: {{ tarefa.data_criacao | datetime_brasilia }}
+                    </span>
+
+                    <!-- Ações -->
+                    <div class="flex space-x-2 mt-2">
+                        <a href="{{ url_for('editar_tarefa', firebase_id=tarefa.firebase_id) }}" class="text-indigo-500 hover:text-indigo-700 transition">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        {% if tarefa.status_id != 3 %}
+                            <a href="{{ url_for('concluir_tarefa', firebase_id=tarefa.firebase_id) }}" class="text-green-500 hover:text-green-700 transition" title="Concluir">
+                                <i class="fas fa-check-circle"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center p-10 border-2 border-dashed border-gray-200 rounded-xl">
+        <i class="fas fa-box-open text-4xl text-gray-400 mb-4"></i>
+        <p class="text-xl text-gray-600 font-semibold">Nenhuma tarefa encontrada.</p>
+        <p class="text-gray-500 mt-2">Comece a organizar seu trabalho criando sua primeira tarefa.</p>
+        <a href="{{ url_for('nova_tarefa') }}" class="mt-4 inline-block px-6 py-2 bg-indigo-500 text-white font-medium rounded-xl hover:bg-indigo-600 transition duration-150">
+            Criar Tarefa
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}{{ tarefa.titulo }} | TaskPro{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <!-- Coluna Principal (Detalhes e Subtarefas/Anexos) -->
+    <div class="lg:col-span-2 space-y-8">
+        <!-- Detalhes Principais -->
+        <div class="pb-4 border-b">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-3">{{ tarefa.titulo }}</h1>
+            <div class="flex flex-wrap items-center space-x-4 mb-4">
+                <span class="px-3 py-1 text-sm font-bold uppercase rounded-full shadow-sm" style="background-color: {{ tarefa.status.cor }}; color: white;">
+                    {{ tarefa.status.nome }}
+                </span>
+                <span class="text-sm text-gray-600 font-medium">
+                    Prioridade: <span class="font-semibold">{{ tarefa.prioridade }}</span>
+                </span>
+                
+                {% if tarefa.id_projeto %}
+                    <span class="text-sm text-indigo-600 font-medium flex items-center">
+                        <i class="fas fa-folder-open mr-2"></i> Projeto: {{ tarefa.id_projeto }}
+                    </span>
+                {% endif %}
+            </div>
+            
+            <p class="text-gray-700 whitespace-pre-wrap">{{ tarefa.descricao }}</p>
+            
+            <!-- Tags -->
+            <div class="mt-4 flex flex-wrap gap-2">
+                {% if tags_na_tarefa %}
+                    {% for tag in tags_na_tarefa %}
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full text-white shadow-sm" style="background-color: {{ tag.cor }};">
+                            {{ tag.nome }}
+                        </span>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-sm text-gray-400">Nenhuma tag aplicada.</p>
+                {% endif %}
+            </div>
+
+            <div class="mt-4 flex space-x-3">
+                <a href="{{ url_for('editar_tarefa', firebase_id=tarefa.firebase_id) }}" class="px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 transition duration-150 flex items-center">
+                    <i class="fas fa-edit mr-2"></i> Editar Tarefa
+                </a>
+                {% if tarefa.status_id != 3 %}
+                    <a href="{{ url_for('concluir_tarefa', firebase_id=tarefa.firebase_id) }}" class="px-4 py-2 text-sm bg-green-500 text-white rounded-xl hover:bg-green-600 transition duration-150 flex items-center">
+                        <i class="fas fa-check-circle mr-2"></i> Marcar como Concluída
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Subtarefas -->
+        <div class="bg-gray-50 p-6 rounded-2xl border">
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center"><i class="fas fa-tasks mr-2 text-indigo-500"></i> Subtarefas</h3>
+            
+            {% if tarefa.subtarefas %}
+                <ul class="space-y-3 mb-6">
+                    {% for subtarefa in tarefa.subtarefas %}
+                        <li class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border">
+                            <span class="flex-1 text-gray-700 {% if subtarefa.concluida %}line-through text-gray-400{% endif %}">
+                                {{ subtarefa.descricao }}
+                            </span>
+                            <a href="{{ url_for('toggle_subtarefa', firebase_id=tarefa.firebase_id, index=loop.index0) }}" 
+                                class="w-8 h-8 flex items-center justify-center rounded-full transition duration-150 
+                                {% if subtarefa.concluida %}bg-green-100 text-green-600 hover:bg-green-200{% else %}bg-gray-100 text-gray-500 hover:bg-gray-200{% endif %}"
+                                title="{% if subtarefa.concluida %}Marcar como Pendente{% else %}Marcar como Concluída{% endif %}">
+                                <i class="fas fa-check"></i>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-gray-500 mb-4">Nenhuma subtarefa adicionada ainda.</p>
+            {% endif %}
+
+            <!-- Formulário Adicionar Subtarefa -->
+            <form action="{{ url_for('add_subtarefa', firebase_id=tarefa.firebase_id) }}" method="POST" class="flex space-x-2">
+                <input type="text" name="descricao" placeholder="Nova subtarefa..." required class="flex-1 p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500">
+                <button type="submit" class="px-4 py-3 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition duration-150 font-semibold">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Anexos -->
+        <div class="bg-gray-50 p-6 rounded-2xl border">
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center"><i class="fas fa-paperclip mr-2 text-indigo-500"></i> Anexos</h3>
+            
+            {% if tarefa.anexos %}
+                <ul class="space-y-3 mb-6">
+                    {% for anexo in tarefa.anexos %}
+                        <li class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border">
+                            <a href="{{ anexo.url }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium break-words">
+                                <i class="fas fa-link mr-2"></i> {{ anexo.nome }}
+                            </a>
+                            <span class="text-xs text-gray-400 ml-4">{{ anexo.data_upload | datetime_brasilia }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-gray-500 mb-4">Nenhum anexo adicionado ainda.</p>
+            {% endif %}
+
+            <!-- Formulário Adicionar Anexo -->
+            <form action="{{ url_for('add_anexo', firebase_id=tarefa.firebase_id) }}" method="POST" class="space-y-2">
+                <input type="text" name="nome" placeholder="Nome do Anexo (ex: Link do Figma)" required class="w-full p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500">
+                <input type="url" name="url" placeholder="URL do Anexo (ex: https://...)" required class="w-full p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500">
+                <button type="submit" class="w-full px-4 py-3 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition duration-150 font-semibold">
+                    <i class="fas fa-paperclip mr-2"></i> Adicionar Anexo
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Coluna de Comentários -->
+    <div class="lg:col-span-1">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Comentários</h2>
+
+        <!-- Lista de Comentários -->
+        <div class="space-y-4 max-h-96 overflow-y-auto mb-6 p-2 rounded-xl bg-gray-50">
+            {% if comentarios %}
+                {% for comentario in comentarios %}
+                    <div class="bg-white p-4 rounded-xl shadow-sm border">
+                        <div class="flex items-center mb-2">
+                            <img src="{{ url_for('static', filename='placeholder.png') }}" onerror="this.onerror=null;this.src='https://placehold.co/40x40/3b82f6/ffffff?text={{ comentario.autor_nome[0].upper() }}';" alt="Perfil" class="w-8 h-8 rounded-full object-cover mr-3">
+                            <div>
+                                <p class="font-semibold text-sm text-gray-800">{{ comentario.autor_nome }}</p>
+                                <span class="text-xs text-gray-400">{{ comentario.data_comentario | datetime_brasilia }}</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 text-sm whitespace-pre-wrap">{{ comentario.conteudo }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-gray-500 p-4 text-center">Nenhum comentário ainda. Seja o primeiro!</p>
+            {% endif %}
+        </div>
+
+        <!-- Formulário de Comentário -->
+        <form action="{{ url_for('comentar', firebase_id=tarefa.firebase_id) }}" method="POST" class="mt-4">
+            <textarea name="conteudo" rows="3" placeholder="Escreva um comentário..." required class="w-full p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 resize-none"></textarea>
+            <button type="submit" class="w-full mt-2 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition duration-150 font-semibold">
+                Comentar
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

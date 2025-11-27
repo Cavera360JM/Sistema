@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Membros | TaskPro{% endblock %}
+
+{% block content %}
+<div class="container mx-auto">
+    <h2 class="text-3xl font-bold text-gray-800 mb-8 border-b-4 border-blue-500 pb-2">Todos os Membros Cadastrados</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        {% for membro in membros %}
+        <div class="bg-white p-6 text-center rounded-xl shadow-md transition duration-300 ease-in-out transform hover:scale-[1.03] hover:shadow-lg border-t-4 border-blue-500">
+            <div class="w-16 h-16 mx-auto mb-4 bg-blue-500 text-white flex items-center justify-center rounded-full text-3xl font-bold">
+                {{ membro.nome[0] | upper }}
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 break-words">{{ membro.nome }}</h3>
+            <p class="text-xs text-gray-500 mt-1">ID: {{ membro.id_usuario }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not membros %}
+    <p class="text-center text-gray-500 p-10 bg-white rounded-xl shadow-md mt-6">Nenhum membro encontrado no sistema.</p>
+    {% endif %}
+</div>
+{% endblock %}

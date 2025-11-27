@@ -1,0 +1,405 @@
+/*
+========================================
+ESTILOS GLOBAIS
+========================================
+*/
+body {
+    /* Usando 'Inter' como font-family moderna, com fallback para sans-serif */
+    font-family: 'Inter', 'Arial', sans-serif;
+    background-color: #f8f9fa; /* Fundo mais claro */
+    color: #343a40; /* Texto escuro padrão */
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    width: 95%; /* Mais largura em telas grandes */
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 0;
+    flex-grow: 1; /* Permite que o container principal cresça */
+}
+
+/*
+========================================
+HEADER E NAVEGAÇÃO
+========================================
+*/
+header {
+    background-color: #007bff; /* Azul Primário para o Header */
+    color: white;
+    padding: 15px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; /* Adiciona padding nas laterais do header */
+    max-width: 1400px; /* Garante que o container do header siga o principal */
+    margin: 0 auto;
+}
+
+header h1 a {
+    color: white;
+    text-decoration: none;
+    font-size: 2em;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+    padding: 8px 12px;
+    border-radius: 8px; /* Cantos mais arredondados */
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    font-weight: 600;
+}
+
+header nav a:hover {
+    background-color: rgba(255, 255, 255, 0.15); /* Efeito de hover translúcido */
+    transform: translateY(-2px); /* Efeito 3D leve */
+}
+
+header nav span {
+    margin-right: 20px;
+    font-weight: 500;
+    color: #e9ecef; /* Cor mais suave para o texto de status */
+}
+
+/*
+========================================
+MAIN CONTENT E HEADINGS
+========================================
+*/
+main {
+    padding: 30px 0;
+    flex-grow: 1;
+}
+
+h2 {
+    color: #343a40;
+    font-size: 2.2em;
+    font-weight: 700;
+    border-bottom: 3px solid #007bff; /* Linha de destaque azul */
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+h3 {
+    color: #007bff;
+    font-size: 1.5em;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+/*
+========================================
+BOTÕES E AÇÕES
+========================================
+*/
+
+/* Estilo Base */
+nav a, .form-comentario button, button[type="submit"], .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px 5px 5px 0;
+    text-decoration: none;
+    border-radius: 10px; /* Super arredondado */
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para profundidade */
+}
+
+/* Botão Primário (Azul) */
+.btn-primary, nav a:not([style*="background-color"]), 
+.form-comentario button, button[type="submit"]:not([style*="background-color"]) {
+    background-color: #007bff; 
+    color: white;
+}
+.btn-primary:hover, nav a:hover:not([style*="background-color"]), 
+.form-comentario button:hover, button[type="submit"]:hover:not([style*="background-color"]) {
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
+    transform: translateY(-1px);
+}
+
+/* Botão Secundário (Cinza/Claro) */
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+.btn-secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-1px);
+}
+
+/* Botão de Exclusão (Vermelho) */
+.btn-delete {
+    background-color: #dc3545 !important; 
+    color: white !important;
+}
+.btn-delete:hover {
+    background-color: #c82333 !important;
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
+    transform: translateY(-1px);
+}
+
+/* Links de Ação (Ver/Editar/Concluir) na Tabela - Mais discretos */
+td a {
+    padding: 6px 10px;
+    margin: 2px;
+    font-size: 0.8em;
+    border: 1px solid #ced4da;
+    color: #495057;
+    background-color: #f1f3f5;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 6px;
+    box-shadow: none;
+    transition: background-color 0.2s;
+}
+td a:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+/*
+========================================
+TABELAS (Listagem de Tarefas, etc.)
+========================================
+*/
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 25px;
+    background-color: white;
+    border-radius: 12px; /* Cantos arredondados na tabela inteira */
+    overflow: hidden; /* Garante que os cantos arredondados funcionem */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08); /* Sombra mais destacada */
+}
+
+table thead {
+    background-color: #007bff;
+    color: white;
+    text-align: left;
+}
+
+table th, table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+table th {
+    font-weight: 700;
+    font-size: 0.95em;
+    text-transform: uppercase;
+}
+
+/* Arredonda os cantos do cabeçalho */
+table thead tr th:first-child { border-top-left-radius: 12px; }
+table thead tr th:last-child { border-top-right-radius: 12px; }
+
+table tbody tr:nth-child(even) {
+    background-color: #f8f9fa; /* Listras suaves */
+}
+
+table tbody tr:hover {
+    background-color: #e9f5ff; /* Destaque azul suave no hover */
+    cursor: pointer;
+}
+
+/* Ajuste para links na coluna Título */
+table td a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+    /* Resetando estilos de botão para link de texto */
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+}
+table td a:hover {
+    text-decoration: underline;
+}
+
+/*
+========================================
+FORMULÁRIOS
+========================================
+*/
+form {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+    border-top: 4px solid #007bff;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.95em;
+}
+
+input[type="text"], input[type="email"], input[type="password"], textarea, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+textarea {
+    min-height: 150px;
+}
+
+/*
+========================================
+FLASH MESSAGES
+========================================
+*/
+.flashes {
+    list-style: none;
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+/*
+========================================
+COMENTÁRIOS (Página tarefa.html)
+========================================
+*/
+.comentarios-list {
+    margin-top: 30px;
+    padding-left: 0;
+}
+
+.comentario-item {
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    padding: 18px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid #007bff; /* Linha de destaque */
+}
+
+.comentario-item p {
+    margin: 5px 0 0 0;
+    font-size: 0.95em;
+}
+
+.comentario-item strong {
+    color: #343a40;
+    font-size: 1.1em;
+}
+
+.comentario-item small {
+    color: #888;
+    font-size: 0.8em;
+    margin-left: 10px;
+    display: block; /* Garante que a data fique abaixo se necessário */
+}
+
+.form-comentario textarea {
+    min-height: 80px;
+}
+
+/*
+========================================
+ADICIONAIS - ESTILOS ESPECÍFICOS
+========================================
+*/
+
+/* Status Badges (Exemplo) */
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: white;
+    margin-right: 5px;
+}
+
+.status-pendente { background-color: #ffc107; color: #343a40; } /* Amarelo */
+.status-em-progresso { background-color: #007bff; } /* Azul */
+.status-concluida { background-color: #28a745; } /* Verde */
+.status-bloqueada { background-color: #dc3545; } /* Vermelho */
+
+/* Tags (Exemplo) */
+.tag-badge {
+    display: inline-block;
+    padding: 3px 7px;
+    border-radius: 4px;
+    font-size: 0.7em;
+    font-weight: 600;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: 1px solid currentColor;
+    opacity: 0.9;
+}
+
+
+/*
+========================================
+FOOTER
+========================================
+*/
+footer {
+    background-color: #343a40; /* Cinza escuro */
+    color: #adb5bd;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: auto; /* Empurra o rodapé para baixo */
+    font-size: 0.9em;
+}

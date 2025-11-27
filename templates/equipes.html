@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Equipes | TaskPro{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-6 border-b pb-4">
+    <h2 class="text-3xl font-bold text-gray-800">Equipes</h2>
+    <a href="{{ url_for('nova_equipe') }}" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition duration-150 shadow-lg flex items-center">
+        <i class="fas fa-plus mr-2"></i> Nova Equipe
+    </a>
+</div>
+
+{% if equipes_list %}
+    <div class="space-y-4">
+        {% for equipe in equipes_list %}
+            <div class="bg-white border border-gray-100 p-5 rounded-xl shadow-lg flex justify-between items-center">
+                <div class="flex-1">
+                    <h3 class="text-xl font-semibold text-gray-900">{{ equipe.nome }}</h3>
+                    <p class="text-sm text-gray-500 mt-1 max-w-xl truncate">{{ equipe.descricao }}</p>
+                    <span class="text-xs text-indigo-500 mt-2 block font-medium">{{ equipe.total_membros }} Membro(s)</span>
+                </div>
+                
+                <div class="flex space-x-2">
+                    <!-- Ação: Gerenciar Membros -->
+                    <a href="{{ url_for('gerenciar_membros', firebase_id=equipe.firebase_id) }}" class="w-8 h-8 flex items-center justify-center text-indigo-500 hover:text-indigo-700 transition rounded-full hover:bg-indigo-50" title="Gerenciar Membros">
+                        <i class="fas fa-user-plus"></i>
+                    </a>
+                    <!-- Ação: Deletar (opcional) -->
+                    <!-- <form action="{{ url_for('deletar_equipe', firebase_id=equipe.firebase_id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar a equipe: {{ equipe.nome }}?');">
+                        <button type="submit" class="w-8 h-8 flex items-center justify-center text-red-500 hover:text-red-700 transition rounded-full hover:bg-red-50" title="Deletar Equipe">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form> -->
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center p-10 border-2 border-dashed border-gray-200 rounded-xl">
+        <i class="fas fa-users text-4xl text-gray-400 mb-4"></i>
+        <p class="text-xl text-gray-600 font-semibold">Nenhuma equipe cadastrada.</p>
+        <a href="{{ url_for('nova_equipe') }}" class="mt-4 inline-block px-6 py-2 bg-indigo-500 text-white font-medium rounded-xl hover:bg-indigo-600 transition duration-150">
+            Criar Primeira Equipe
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

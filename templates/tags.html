@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Tags | TaskPro{% endblock %}
+
+{% block content %}
+<h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-4">Gerenciar Tags</h2>
+
+<!-- Formulário para Criar Nova Tag -->
+<div class="bg-gray-50 p-6 rounded-2xl border mb-8 shadow-inner">
+    <h3 class="text-xl font-semibold text-gray-800 mb-4">Criar Nova Tag</h3>
+    <form method="POST" action="{{ url_for('nova_tag') }}" class="flex flex-col md:flex-row gap-4 items-end">
+        <div class="flex-1 w-full">
+            <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Nome da Tag</label>
+            <input type="text" id="nome" name="nome" placeholder="Ex: Urgente, Bug, Marketing" required class="w-full p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+        <div class="w-full md:w-32">
+            <label for="cor" class="block text-sm font-medium text-gray-700 mb-1">Cor</label>
+            <input type="color" id="cor" name="cor" value="#3b82f6" class="w-full h-12 p-1 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 cursor-pointer">
+        </div>
+        <button type="submit" class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition duration-150 shadow-lg">
+            <i class="fas fa-plus mr-2"></i> Adicionar
+        </button>
+    </form>
+</div>
+
+<!-- Lista de Tags Existentes -->
+<h3 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">Tags Existentes ({{ tags_list | length }})</h3>
+
+{% if tags_list %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for tag in tags_list %}
+            <div class="p-4 rounded-xl border border-gray-100 shadow-md flex justify-between items-center" style="border-left: 5px solid {{ tag.cor }};">
+                <div class="flex items-center space-x-3">
+                    <span class="w-3 h-3 rounded-full" style="background-color: {{ tag.cor }};"></span>
+                    <span class="text-lg font-medium text-gray-800">{{ tag.nome }}</span>
+                </div>
+                
+                <form action="{{ url_for('deletar_tag', firebase_id=tag.firebase_id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar a tag: {{ tag.nome }}? Esta ação não pode ser desfeita e removerá a tag de todas as tarefas associadas.');">
+                    <button type="submit" class="w-8 h-8 flex items-center justify-center text-red-500 hover:text-red-700 transition rounded-full hover:bg-red-50" title="Deletar Tag">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center p-10 border-2 border-dashed border-gray-200 rounded-xl">
+        <i class="fas fa-tag text-4xl text-gray-400 mb-4"></i>
+        <p class="text-xl text-gray-600 font-semibold">Nenhuma tag encontrada.</p>
+        <p class="text-gray-500 mt-2">Use o formulário acima para criar suas primeiras tags de organização.</p>
+    </div>
+{% endif %}
+{% endblock %}

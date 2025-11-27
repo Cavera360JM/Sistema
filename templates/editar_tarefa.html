@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Editar Tarefa | TaskPro{% endblock %}
+
+{% block content %}
+<h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-4">Editar Tarefa: {{ tarefa.titulo }}</h2>
+
+<form method="POST" action="{{ url_for('editar_tarefa', firebase_id=tarefa.firebase_id) }}" class="space-y-6">
+    <!-- Título e Descrição -->
+    <div>
+        <label for="titulo" class="block text-sm font-medium text-gray-700 mb-1">Título</label>
+        <input type="text" id="titulo" name="titulo" value="{{ tarefa.titulo }}" required class="w-full p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500">
+    </div>
+    
+    <div>
+        <label for="descricao" class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+        <textarea id="descricao" name="descricao" rows="4" required class="w-full p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 resize-none">{{ tarefa.descricao }}</textarea>
+    </div>
+    
+    <!-- Status, Prioridade, Projeto e Tags -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Status -->
+        <div>
+            <label for="status_id" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <select id="status_id" name="status_id" required class="w-full p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500">
+                {% for status in status_opcoes %}
+                    <option value="{{ status.id }}" {% if status.id == tarefa.status_id %}selected{% endif %}>{{ status.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Prioridade -->
+        <div>
+            <label for="prioridade_id" class="block text-sm font-medium text-gray-700 mb-1">Prioridade</label>
+            <select id="prioridade_id" name="prioridade_id" required class="w-full p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500">
+                {% for prioridade in prioridade_opcoes %}
+                    <option value="{{ prioridade.id }}" {% if prioridade.id == tarefa.prioridade_id %}selected{% endif %}>{{ prioridade.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- Projeto -->
+        <div>
+            <label for="projeto_id" class="block text-sm font-medium text-gray-700 mb-1">Projeto (Opcional)</label>
+            <select id="projeto_id" name="projeto_id" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500">
+                <option value="None">Nenhum Projeto</option>
+                {% for projeto in projetos_opcoes %}
+                    <option value="{{ projeto.id }}" {% if projeto.id == tarefa.id_projeto %}selected{% endif %}>{{ projeto.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Tags -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tags (Opcional)</label>
+            <div class="max-h-24 overflow-y-auto border border-gray-300 rounded-xl p-2 bg-white">
+                {% set tarefa_tags = tarefa.tags or [] %}
+                {% if tags_opcoes %}
+                    {% for tag_id, tag_data in tags_opcoes.items() %}
+                        <div class="flex items-center mb-1">
+                            <input type="checkbox" id="tag-{{ tag_id }}" name="tags" value="{{ tag_id }}" class="h-4 w-4 text-indigo-600 border-gray-300 rounded-md focus:ring-indigo-500"
+                                {% if tag_id in tarefa_tags %}checked{% endif %}>
+                            <label for="tag-{{ tag_id }}" class="ml-2 text-sm text-gray-700 flex items-center">
+                                <span class="w-2 h-2 rounded-full mr-2" style="background-color: {{ tag_data.cor }};"></span>
+                                {{ tag_data.nome }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-xs text-gray-500">Nenhuma tag cadastrada. Crie uma na seção Tags.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Botão de Envio -->
+    <div class="pt-4 flex justify-between items-center">
+        <button type="submit" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition duration-150 shadow-lg">
+            Salvar Alterações
+        </button>
+        <form action="{{ url_for('deletar_tarefa', firebase_id=tarefa.firebase_id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja DELETAR esta tarefa?');">
+            <button type="submit" class="px-6 py-3 bg-red-500 text-white font-semibold rounded-xl hover:bg-red-600 transition duration-150 shadow-lg">
+                <i class="fas fa-trash-alt mr-2"></i> Deletar
+            </button>
+        </form>
+    </div>
+</form>
+{% endblock %}
